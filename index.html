@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tienda Belleza – Morado Neón Responsive</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0b0a10;
+  --card: #141224;
+  --ink: #e6e1ff;
+  --brand: #8a2bff;
+  --brand2: #b34dff;
+  --glow: 0 0 18px rgba(138,43,255,.65), 0 0 42px rgba(179,77,255,.35);
+  --success: #00c853;
+  --error: #ff1744;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 20% -10%, rgba(138,43,255,.15), transparent), var(--bg);
+  color: var(--ink);
+  font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(11,10,16,.75);
+  backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.brand {
+  font-size: 22px;
+  letter-spacing: .4px;
+}
+
+.brand span {
+  color: var(--brand);
+  text-shadow: var(--glow);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.chip {
+  background: #1b1830;
+  color: var(--ink);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  box-shadow: var(--glow);
+  border-color: rgba(255,255,255,.18);
+}
+
+.chip.active {
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  color: white;
+  box-shadow: var(--glow);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  flex: 1;
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(138,43,255,.18), rgba(179,77,255,.12));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 22px;
+  box-shadow: var(--glow);
+}
+
+.hero h2 {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+}
+
+.hero p {
+  margin: 0;
+  color: #d7cffc;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  background: linear-gradient(180deg, #15122a, #0f0e1b);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+}
+
+.imgWrap {
+  position: relative;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+}
+
+.imgWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.1);
+}
+
+.info {
+  padding: 14px;
+}
+
+.info h3 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+}
+
+.price {
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--glow);
+  border: 1px solid rgba(255,255,255,.1);
+  cursor: pointer;
+}
+
+.cta:hover {
+  filter: brightness(1.08);
+}
+
+.footer {
+  padding: 28px;
+  text-align: center;
+  color: #bfb7ff;
+  border-top: 1px solid rgba(255,255,255,.06);
+  margin-top: 24px;
+}
+
+/* Admin Button */
+.admin-btn {
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--glow);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Admin Panel */
+.admin-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11,10,16,.95);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.admin-panel.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.admin-content {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--glow);
+  position: relative;
+}
+
+.close-admin {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--ink);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.admin-content h2 {
+  margin-bottom: 20px;
+  color: var(--brand);
+  text-align: center;
+}
+
+.upload-area {
+  border: 2px dashed rgba(138,43,255,.5);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+  transition: border-color 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+
+.upload-area:hover {
+  border-color: var(--brand);
+}
+
+.upload-area i {
+  font-size: 48px;
+  color: var(--brand);
+  margin-bottom: 12px;
+}
+
+.upload-area p {
+  margin: 8px 0;
+}
+
+.upload-area input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-btn {
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--glow);
+  width: 100%;
+  margin-top: 16px;
+  transition: filter 0.2s;
+}
+
+.upload-btn:hover {
+  filter: brightness(1.1);
+}
+
+.upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.manual-form {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.form-group input, .form-group select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(0,0,0,.2);
+  color: var(--ink);
+}
+
+.status-message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.status-success {
+  background: rgba(0,200,83,.1);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.status-error {
+  background: rgba(255,23,68,.1);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.product-list {
+  margin-top: 24px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.product-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.product-item:last-child {
+  border-bottom: none;
+}
+
+.delete-btn {
+  color: var(--error);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Login modal */
+.login-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11,10,16,.95);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-content {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--glow);
+}
+
+.login-content h2 {
+  margin-bottom: 20px;
+  color: var(--brand);
+  text-align: center;
+}
+
+.login-form {
+  display: grid;
+  gap: 16px;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <h1 class="brand">Belleza<span>Neón</span></h1>
+  <nav class="nav">
+    <button class="chip active" data-filter="all">Todos</button>
+    <button class="chip" data-filter="cepillos">Cepillos</button>
+    <button class="chip" data-filter="shampoos">Shampoos</button>
+    <button class="chip" data-filter="secadoras">Secadoras</button>
+    <button class="chip" data-filter="planchas">Planchas</button>
+    <button class="chip" data-filter="acrilicos-unas">Acrílicos Uñas</button>
+  </nav>
+  <button class="admin-btn" id="adminBtn"><i class="fas fa-cog"></i> Admin</button>
+</header>
+<main class="container">
+  <section class="hero">
+    <h2>Brilla con estilo</h2>
+    <p>Productos seleccionados. Compra directa por WhatsApp.</p>
+  </section>
+  <section class="grid" id="productGrid"></section>
+</main>
+<footer class="footer"><p>© 2025 BellezaNeón</p></footer>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-content">
+    <button class="close-admin" id="closeAdmin"><i class="fas fa-times"></i></button>
+    <h2><i class="fas fa-cog"></i> Panel de Administración</h2>
+    
+    <div class="upload-area" id="dropArea">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <h3>Subir archivo Excel</h3>
+      <p>Haga clic o arrastre un archivo Excel (.xlsx) aquí</p>
+      <p class="small">Formato requerido: ID, Nombre, Precio, Categoría, URL Imagen</p>
+      <input type="file" id="fileInput" accept=".xlsx, .xls, .csv">
+    </div>
+    
+    <button class="upload-btn" id="processBtn" disabled>Procesar Archivo</button>
+    
+    <div class="manual-form">
+      <h3>Agregar producto manualmente</h3>
+      <div class="form-group">
+        <label for="productId">ID del Producto</label>
+        <input type="text" id="productId" placeholder="Ej: P031">
+      </div>
+      <div class="form-group">
+        <label for="productName">Nombre del Producto</label>
+        <input type="text" id="productName" placeholder="Ej: Crema Hidratante Premium">
+      </div>
+      <div class="form-group">
+        <label for="productPrice">Precio</label>
+        <input type="number" id="productPrice" placeholder="Ej: 299">
+      </div>
+      <div class="form-group">
+        <label for="productCategory">Categoría</label>
+        <select id="productCategory">
+          <option value="cepillos">Cepillos</option>
+          <option value="shampoos">Shampoos</option>
+          <option value="secadoras">Secadoras</option>
+          <option value="planchas">Planchas</option>
+          <option value="acrilicos-unas">Acrílicos Uñas</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="productImage">URL de la Imagen</label>
+        <input type="text" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
+      </div>
+      <button class="cta" id="addManualBtn">Agregar Producto</button>
+    </div>
+    
+    <div class="product-list" id="productList">
+      <h3>Productos Actuales</h3>
+      <!-- Product list will be populated by JavaScript -->
+    </div>
+    
+    <div id="statusMessage" class="status-message hidden"></div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="login-modal" id="loginModal">
+  <div class="login-content">
+    <h2><i class="fas fa-lock"></i> Acceso Administrador</h2>
+    <div class="login-form">
+      <div class="form-group">
+        <label for="adminPassword">Contraseña</label>
+        <input type="password" id="adminPassword" placeholder="Ingrese la contraseña">
+      </div>
+      <button class="cta" id="loginBtn">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Configuración
+const WAPP = '525618371510';
+const ADMIN_PASSWORD = 'admin123'; // Contraseña simple para demostración
+
+// Cargar productos desde localStorage o usar los predeterminados
+let PRODUCTS = JSON.parse(localStorage.getItem('bellezaProducts')) || [
+  {"id":"P001","name":"Cepillo iónico compacto","price":249,"category":"cepillos","img":"https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop"},
+  {"id":"P002","name":"Cepillo desenredante pro","price":199,"category":"cepillos","img":"https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop"},
+  {"id":"P003","name":"Cepillo térmico cerámica","price":289,"category":"cepillos","img":"https://images.unsplash.com/photo-1608571423902-eed4a5ad810c?w=600&h=400&fit=crop"},
+  {"id":"P004","name":"Cepillo redondo styling","price":259,"category":"cepillos","img":"https://images.unsplash.com/photo-1519415711931-702deacf5be2?w=600&h=400&fit=crop"},
+  {"id":"P005","name":"Cepillo masaje cuero cabelludo","price":149,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop"},
+  {"id":"P006","name":"Cepillo plegable con espejo","price":129,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop"},
+  {"id":"P007","name":"Shampoo nutritivo argán 500ml","price":329,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
+  {"id":"P008","name":"Shampoo matizador violeta 300ml","price":299,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
+  {"id":"P009","name":"Shampoo sin sulfatos 400ml","price":349,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
+  {"id":"P010","name":"Shampoo fortalecedor biotina","price":319,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
+  {"id":"P011","name":"Shampoo hidratación profunda","price":309,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
+  {"id":"P012","name":"Shampoo detox carbón activo","price":289,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
+  {"id":"P013","name":"Secadora iónica 1800W","price":1299,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P014","name":"Secadora compacta viaje","price":799,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P015","name":"Secadora profesional 2200W","price":1699,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P016","name":"Secadora difusor rizos","price":1399,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P017","name":"Secadora silenciosa","price":1499,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P018","name":"Secadora turbo brush","price":1599,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P019","name":"Plancha cerámica 1\"","price":999,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
+  {"id":"P025","name":"Acrílico cover nude 30g","price":249,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
+  {"id":"P026","name":"Monómero bajo olor 120ml","price":219,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
+  {"id":"P027","name":"Pincel kolinsky #8","price":349,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
+  {"id":"P028","name":"Tip natural almond 500pcs","price":199,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
+  {"id":"P029","name":"Líquido preparador PH","price":159,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
+  {"id":"P030","name":"Top coat no wipe","price":179,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"}
+];
+
+// Utilidades
+function price(n) { 
+  return n.toLocaleString('es-MX', {style: 'currency', currency: 'MXN'}); 
+}
+
+function showStatus(message, isSuccess = true) {
+  const statusEl = document.getElementById('statusMessage');
+  statusEl.textContent = message;
+  statusEl.className = isSuccess ? 'status-message status-success' : 'status-message status-error';
+  statusEl.classList.remove('hidden');
+  
+  setTimeout(() => {
+    statusEl.classList.add('hidden');
+  }, 3000);
+}
+
+// Funciones de productos
+function card(p) {
+  const msg = encodeURIComponent(`Hola, me interesa el producto ${p.id} – ${p.name} (${price(p.price)}). ¿Disponible?`);
+  const href = `https://wa.me/${WAPP}?text=${msg}`;
+  return `
+    <article class="card" data-cat="${p.category}">
+      <div class="imgWrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
+      <div class="info">
+        <h3>${p.name}</h3>
+        <p class="price">${price(p.price)}</p>
+        <a class="cta" href="${href}" target="_blank" rel="noopener">Comprar por WhatsApp</a>
+      </div>
+    </article>`;
+}
+
+function render(filter = 'all') {
+  const grid = document.getElementById('productGrid');
+  const data = (filter === 'all') ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+  grid.innerHTML = data.map(card).join('');
+  document.querySelectorAll('.chip').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+}
+
+function updateProductList() {
+  const productList = document.getElementById('productList');
+  productList.innerHTML = '<h3>Productos Actuales (' + PRODUCTS.length + ')</h3>';
+  
+  PRODUCTS.forEach(product => {
+    const item = document.createElement('div');
+    item.className = 'product-item';
+    item.innerHTML = `
+      <span>${product.name}</span>
+      <span>${price(product.price)}</span>
+      <button class="delete-btn" data-id="${product.id}"><i class="fas fa-trash"></i></button>
+    `;
+    productList.appendChild(item);
+  });
+  
+  // Agregar event listeners a los botones de eliminar
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = e.currentTarget.dataset.id;
+      deleteProduct(id);
+    });
+  });
+}
+
+function saveProducts() {
+  localStorage.setItem('bellezaProducts', JSON.stringify(PRODUCTS));
+  render();
+  updateProductList();
+  showStatus('Productos guardados correctamente');
+}
+
+function addProduct(product) {
+  // Verificar si el producto ya existe
+  const existingIndex = PRODUCTS.findIndex(p => p.id === product.id);
+  
+  if (existingIndex >= 0) {
+    // Actualizar producto existente
+    PRODUCTS[existingIndex] = product;
+    showStatus('Producto actualizado correctamente');
+  } else {
+    // Agregar nuevo producto
+    PRODUCTS.push(product);
+    showStatus('Producto agregado correctamente');
+  }
+  
+  saveProducts();
+}
+
+function deleteProduct(id) {
+  if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+    PRODUCTS = PRODUCTS.filter(p => p.id !== id);
+    saveProducts();
+  }
+}
+
+// Funciones para procesar Excel (simulado)
+function processExcelData(data) {
+  // En una implementación real, aquí procesarías el archivo Excel
+  // Para este ejemplo, simulamos datos de productos desde Excel
+  try {
+    // Simulamos la extracción de datos del Excel
+    const newProducts = [
+      {id: "P031", name: "Kit Maquillaje Profesional", price: 899, category: "otros", img: "https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop"},
+      {id: "P032", name: "Paleta Sombras 12 colores", price: 459, category: "otros", img: "https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop"},
+      {id: "P033", name: "Base Líquida Full Cover", price: 399, category: "otros", img: "https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop"}
+    ];
+    
+    // Agregar los nuevos productos
+    newProducts.forEach(product => {
+      addProduct(product);
+    });
+    
+    showStatus('Datos de Excel procesados correctamente. 3 productos agregados.');
+  } catch (error) {
+    showStatus('Error al procesar el archivo Excel: ' + error.message, false);
+  }
+}
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+  // Renderizar productos iniciales
+  render();
+  
+  // Configurar filtros
+  document.querySelectorAll('.chip').forEach(b => {
+    b.addEventListener('click', () => render(b.dataset.filter));
+  });
+  
+  // Configurar panel de administración
+  const adminBtn = document.getElementById('adminBtn');
+  const adminPanel = document.getElementById('adminPanel');
+  const closeAdmin = document.getElementById('closeAdmin');
+  const loginModal = document.getElementById('loginModal');
+  const loginBtn = document.getElementById('loginBtn');
+  
+  adminBtn.addEventListener('click', () => {
+    loginModal.classList.remove('hidden');
+  });
+  
+  closeAdmin.addEventListener('click', () => {
+    adminPanel.classList.remove('active');
+  });
+  
+  loginBtn.addEventListener('click', () => {
+    const password = document.getElementById('adminPassword').value;
+    if (password === ADMIN_PASSWORD) {
+      loginModal.classList.add('hidden');
+      adminPanel.classList.add('active');
+      updateProductList();
+    } else {
+      alert('Contraseña incorrecta');
+    }
+  });
+  
+  // Configurar subida de archivos
+  const dropArea = document.getElementById('dropArea');
+  const fileInput = document.getElementById('fileInput');
+  const processBtn = document.getElementById('processBtn');
+  
+  dropArea.addEventListener('click', () => {
+    fileInput.click();
+  });
+  
+  dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.style.borderColor = 'var(--brand)';
+  });
+  
+  dropArea.addEventListener('dragleave', () => {
+    dropArea.style.borderColor = 'rgba(138,43,255,.5)';
+  });
+  
+  dropArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropArea.style.borderColor = 'rgba(138,43,255,.5)';
+    
+    if (e.dataTransfer.files.length) {
+      fileInput.files = e.dataTransfer.files;
+      processBtn.disabled = false;
+    }
+  });
+  
+  fileInput.addEventListener('change', () => {
+    processBtn.disabled = !fileInput.files.length;
+  });
+  
+  processBtn.addEventListener('click', () => {
+    if (fileInput.files.length) {
+      processExcelData(null); // En una implementación real, pasarías el archivo
+    }
+  });
+  
+  // Configurar formulario manual
+  const addManualBtn = document.getElementById('addManualBtn');
+  
+  addManualBtn.addEventListener('click', () => {
+    const id = document.getElementById('productId').value.trim();
+    const name = document.getElementById('productName').value.trim();
+    const price = parseInt(document.getElementById('productPrice').value);
+    const category = document.getElementById('productCategory').value;
+    const img = document.getElementById('productImage').value.trim();
+    
+    if (!id || !name || isNaN(price) || !img) {
+      showStatus('Por favor, complete todos los campos correctamente', false);
+      return;
+    }
+    
+    const newProduct = {
+      id: id,
+      name: name,
+      price: price,
+      category: category,
+      img: img
+    };
+    
+    addProduct(newProduct);
+    
+    // Limpiar formulario
+    document.getElementById('productId').value = '';
+    document.getElementById('productName').value = '';
+    document.getElementById('productPrice').value = '';
+    document.getElementById('productImage').value = '';
+  });
+});
+</script>
+</body>
+</html>
