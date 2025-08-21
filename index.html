@@ -59,10 +59,16 @@
 
         .nav {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 10px;
             overflow-x: auto;
             padding-bottom: 4px;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        .nav::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         .chip {
@@ -74,6 +80,7 @@
             cursor: pointer;
             transition: .2s;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .chip:hover {
@@ -176,6 +183,12 @@
             color: #fff;
         }
 
+        .stock {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #bfb7ff;
+        }
+
         .cta {
             display: inline-flex;
             align-items: center;
@@ -195,6 +208,12 @@
 
         .cta:hover {
             filter: brightness(1.08);
+        }
+
+        .cta:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
         .footer {
@@ -593,52 +612,34 @@
             border: none;
         }
 
-        /* Login modal */
-        .login-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(11,10,16,.95);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+        /* Excel Format Info */
+        .excel-format {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,.2);
+            border-radius: 8px;
+            border-left: 4px solid var(--brand);
         }
 
-        .login-modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .login-content {
-            background: var(--card);
-            border: 1px solid rgba(255,255,255,.1);
-            border-radius: 16px;
-            padding: 24px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--glow);
-        }
-
-        .login-content h2 {
-            margin-bottom: 20px;
+        .excel-format h4 {
+            margin-bottom: 10px;
             color: var(--brand);
-            text-align: center;
         }
 
-        .login-form {
-            display: grid;
-            gap: 16px;
+        .excel-format table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
 
-        .hidden {
-            display: none;
+        .excel-format th, .excel-format td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,.1);
+        }
+
+        .excel-format th {
+            background: rgba(138,43,255,.2);
         }
 
         /* Empty cart message */
@@ -652,6 +653,10 @@
             font-size: 48px;
             margin-bottom: 16px;
             color: var(--brand);
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -721,11 +726,56 @@
                 <i class="fas fa-cloud-upload-alt"></i>
                 <h3>Subir archivo Excel</h3>
                 <p>Haga clic o arrastre un archivo Excel (.xlsx) aquí</p>
-                <p class="small">Formato requerido: ID, Nombre, Precio, Categoría, URL Imagen</p>
                 <input type="file" id="fileInput" accept=".xlsx, .xls, .csv">
             </div>
             
             <button class="upload-btn" id="processBtn" disabled>Procesar Archivo</button>
+            
+            <div class="excel-format">
+                <h4>Formato requerido para el archivo Excel:</h4>
+                <p>Las columnas deben estar en este orden exacto:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Columna</th>
+                            <th>Descripción</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A: ID</td>
+                            <td>Identificador único</td>
+                            <td>P031</td>
+                        </tr>
+                        <tr>
+                            <td>B: Nombre</td>
+                            <td>Nombre del producto</td>
+                            <td>Crema Hidratante Premium</td>
+                        </tr>
+                        <tr>
+                            <td>C: Precio</td>
+                            <td>Precio numérico</td>
+                            <td>299</td>
+                        </tr>
+                        <tr>
+                            <td>D: Categoría</td>
+                            <td>cepillos, shampoos, secadoras, planchas, acrilicos-unas, otros</td>
+                            <td>cepillos</td>
+                        </tr>
+                        <tr>
+                            <td>E: URL Imagen</td>
+                            <td>Enlace a la imagen</td>
+                            <td>https://ejemplo.com/imagen.jpg</td>
+                        </tr>
+                        <tr>
+                            <td>F: Cantidad</td>
+                            <td>Stock disponible (número)</td>
+                            <td>15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             
             <div class="manual-form">
                 <h3>Agregar producto manualmente</h3>
@@ -756,6 +806,10 @@
                     <label for="productImage">URL de la Imagen</label>
                     <input type="text" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
                 </div>
+                <div class="form-group">
+                    <label for="productQuantity">Cantidad en Stock</label>
+                    <input type="number" id="productQuantity" placeholder="Ej: 15" value="10" min="0">
+                </div>
                 <button class="cta" id="addManualBtn">Agregar Producto</button>
             </div>
             
@@ -768,57 +822,42 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-content">
-            <h2><i class="fas fa-lock"></i> Acceso Administrador</h2>
-            <div class="login-form">
-                <div class="form-group">
-                    <label for="adminPassword">Contraseña</label>
-                    <input type="password" id="adminPassword" placeholder="Ingrese la contraseña">
-                </div>
-                <button class="cta" id="loginBtn">Ingresar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Configuración
         const WAPP = '525618371510';
-        const ADMIN_PASSWORD = 'admin123'; // Contraseña simple para demostración
 
         // Cargar productos desde localStorage o usar los predeterminados
         let PRODUCTS = JSON.parse(localStorage.getItem('bellezaProducts')) || [
-            {"id":"P001","name":"Cepillo iónico compacto","price":249,"category":"cepillos","img":"https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop"},
-            {"id":"P002","name":"Cepillo desenredante pro","price":199,"category":"cepillos","img":"https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop"},
-            {"id":"P003","name":"Cepillo térmico cerámica","price":289,"category":"cepillos","img":"https://images.unsplash.com/photo-1608571423902-eed4a5ad810c?w=600&h=400&fit=crop"},
-            {"id":"P004","name":"Cepillo redondo styling","price":259,"category":"cepillos","img":"https://images.unsplash.com/photo-1519415711931-702deacf5be2?w=600&h=400&fit=crop"},
-            {"id":"P005","name":"Cepillo masaje cuero cabelludo","price":149,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop"},
-            {"id":"P006","name":"Cepillo plegable con espejo","price":129,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop"},
-            {"id":"P007","name":"Shampoo nutritivo argán 500ml","price":329,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
-            {"id":"P008","name":"Shampoo matizador violeta 300ml","price":299,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
-            {"id":"P009","name":"Shampoo sin sulfatos 400ml","price":349,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
-            {"id":"P010","name":"Shampoo fortalecedor biotina","price":319,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
-            {"id":"P011","name":"Shampoo hidratación profunda","price":309,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
-            {"id":"P012","name":"Shampoo detox carbón activo","price":289,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop"},
-            {"id":"P013","name":"Secadora iónica 1800W","price":1299,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P014","name":"Secadora compacta viaje","price":799,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P015","name":"Secadora profesional 2200W","price":1699,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P016","name":"Secadora difusor rizos","price":1399,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P017","name":"Secadora silenciosa","price":1499,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P018","name":"Secadora turbo brush","price":1599,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P019","name":"Plancha cerámica 1\"","price":999,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop"},
-            {"id":"P025","name":"Acrílico cover nude 30g","price":249,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
-            {"id":"P026","name":"Monómero bajo olor 120ml","price":219,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
-            {"id":"P027","name":"Pincel kolinsky #8","price":349,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
-            {"id":"P028","name":"Tip natural almond 500pcs","price":199,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
-            {"id":"P029","name":"Líquido preparador PH","price":159,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"},
-            {"id":"P030","name":"Top coat no wipe","price":179,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop"}
+            {"id":"P001","name":"Cepillo iónico compacto","price":249,"category":"cepillos","img":"https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop","quantity":10},
+            {"id":"P002","name":"Cepillo desenredante pro","price":199,"category":"cepillos","img":"https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop","quantity":8},
+            {"id":"P003","name":"Cepillo térmico cerámica","price":289,"category":"cepillos","img":"https://images.unsplash.com/photo-1608571423902-eed4a5ad810c?w=600&h=400&fit=crop","quantity":5},
+            {"id":"P004","name":"Cepillo redondo styling","price":259,"category":"cepillos","img":"https://images.unsplash.com/photo-1519415711931-702deacf5be2?w=600&h=400&fit=crop","quantity":12},
+            {"id":"P005","name":"Cepillo masaje cuero cabelludo","price":149,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop","quantity":7},
+            {"id":"P006","name":"Cepillo plegable con espejo","price":129,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P007","name":"Shampoo nutritivo argán 500ml","price":329,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":20},
+            {"id":"P008","name":"Shampoo matizador violeta 300ml","price":299,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":15},
+            {"id":"P009","name":"Shampoo sin sulfatos 400ml","price":349,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":18},
+            {"id":"P010","name":"Shampoo fortalecedor biotina","price":319,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":22},
+            {"id":"P011","name":"Shampoo hidratación profunda","price":309,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":14},
+            {"id":"P012","name":"Shampoo detox carbón activo","price":289,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":9},
+            {"id":"P013","name":"Secadora iónica 1800W","price":1299,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":6},
+            {"id":"P014","name":"Secadora compacta viaje","price":799,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":4},
+            {"id":"P015","name":"Secadora profesional 2200W","price":1699,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":2},
+            {"id":"P016","name":"Secadora difusor rizos","price":1399,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":7},
+            {"id":"P017","name":"Secadora silenciosa","price":1499,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P018","name":"Secadora turbo brush","price":1599,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":5},
+            {"id":"P019","name":"Plancha cerámica 1\"","price":999,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":8},
+            {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":4},
+            {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":6},
+            {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":10},
+            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":2},
+            {"id":"P025","name":"Acrílico cover nude 30g","price":249,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":25},
+            {"id":"P026","name":"Monómero bajo olor 120ml","price":219,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":18},
+            {"id":"P027","name":"Pincel kolinsky #8","price":349,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":12},
+            {"id":"P028","name":"Tip natural almond 500pcs","price":199,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":30},
+            {"id":"P029","name":"Líquido preparador PH","price":159,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":22},
+            {"id":"P030","name":"Top coat no wipe","price":179,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":17}
         ];
 
         // Carrito de compras
@@ -847,9 +886,21 @@
         }
 
         function addToCart(product) {
+            // Verificar si hay stock disponible
+            const productInStock = PRODUCTS.find(p => p.id === product.id);
+            if (productInStock.quantity <= 0) {
+                showStatus('No hay stock disponible de ' + product.name, false);
+                return;
+            }
+            
             const existingItem = CART.find(item => item.id === product.id);
             
             if (existingItem) {
+                // Verificar que no exceda el stock disponible
+                if (existingItem.quantity + 1 > productInStock.quantity) {
+                    showStatus('No hay suficiente stock de ' + product.name, false);
+                    return;
+                }
                 existingItem.quantity += 1;
             } else {
                 CART.push({
@@ -876,6 +927,14 @@
         function updateQuantity(productId, change) {
             const item = CART.find(item => item.id === productId);
             if (item) {
+                const productInStock = PRODUCTS.find(p => p.id === productId);
+                
+                // Verificar que no exceda el stock disponible
+                if (change > 0 && item.quantity + change > productInStock.quantity) {
+                    showStatus('No hay suficiente stock disponible', false);
+                    return;
+                }
+                
                 item.quantity += change;
                 
                 if (item.quantity <= 0) {
@@ -956,14 +1015,16 @@
 
         // Funciones de productos
         function card(p) {
+            const isOutOfStock = p.quantity <= 0;
             return `
                 <article class="card" data-cat="${p.category}">
                     <div class="imgWrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
                     <div class="info">
                         <h3>${p.name}</h3>
                         <p class="price">${price(p.price)}</p>
-                        <button class="cta add-to-cart" onclick="addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
+                        <p class="stock">${isOutOfStock ? '❌ Agotado' : `✅ En stock: ${p.quantity}`}</p>
+                        <button class="cta add-to-cart" onclick="addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})" ${isOutOfStock ? 'disabled' : ''}>
+                            <i class="fas fa-cart-plus"></i> ${isOutOfStock ? 'Agotado' : 'Agregar al carrito'}
                         </button>
                     </div>
                 </article>`;
@@ -986,8 +1047,11 @@
                 const item = document.createElement('div');
                 item.className = 'product-item';
                 item.innerHTML = `
-                    <span>${product.name}</span>
-                    <span>${price(product.price)}</span>
+                    <div>
+                        <div>${product.name}</div>
+                        <small>${price(product.price)} - Stock: ${product.quantity}</small>
+                    </div>
+                    <span>${product.category}</span>
                     <button class="delete-btn" data-id="${product.id}"><i class="fas fa-trash"></i></button>
                 `;
                 productList.appendChild(item);
@@ -1040,9 +1104,9 @@
             try {
                 // Simulamos la extracción de datos del Excel
                 const newProducts = [
-                    {id: "P031", name: "Kit Maquillaje Profesional", price: 899, category: "otros", img: "https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop"},
-                    {id: "P032", name: "Paleta Sombras 12 colores", price: 459, category: "otros", img: "https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop"},
-                    {id: "P033", name: "Base Líquida Full Cover", price: 399, category: "otros", img: "https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop"}
+                    {id: "P031", name: "Kit Maquillaje Profesional", price: 899, category: "otros", img: "https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop", quantity: 10},
+                    {id: "P032", name: "Paleta Sombras 12 colores", price: 459, category: "otros", img: "https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop", quantity: 15},
+                    {id: "P033", name: "Base Líquida Full Cover", price: 399, category: "otros", img: "https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop", quantity: 8}
                 ];
                 
                 // Agregar los nuevos productos
@@ -1096,26 +1160,14 @@
             const adminBtn = document.getElementById('adminBtn');
             const adminPanel = document.getElementById('adminPanel');
             const closeAdmin = document.getElementById('closeAdmin');
-            const loginModal = document.getElementById('loginModal');
-            const loginBtn = document.getElementById('loginBtn');
             
             adminBtn.addEventListener('click', () => {
-                loginModal.classList.add('active');
+                adminPanel.classList.add('active');
+                updateProductList();
             });
             
             closeAdmin.addEventListener('click', () => {
                 adminPanel.classList.remove('active');
-            });
-            
-            loginBtn.addEventListener('click', () => {
-                const password = document.getElementById('adminPassword').value;
-                if (password === ADMIN_PASSWORD) {
-                    loginModal.classList.remove('active');
-                    adminPanel.classList.add('active');
-                    updateProductList();
-                } else {
-                    alert('Contraseña incorrecta');
-                }
             });
             
             // Configurar subida de archivos
@@ -1165,8 +1217,9 @@
                 const price = parseInt(document.getElementById('productPrice').value);
                 const category = document.getElementById('productCategory').value;
                 const img = document.getElementById('productImage').value.trim();
+                const quantity = parseInt(document.getElementById('productQuantity').value) || 0;
                 
-                if (!id || !name || isNaN(price) || !img) {
+                if (!id || !name || isNaN(price) || !img || isNaN(quantity)) {
                     showStatus('Por favor, complete todos los campos correctamente', false);
                     return;
                 }
@@ -1176,7 +1229,8 @@
                     name: name,
                     price: price,
                     category: category,
-                    img: img
+                    img: img,
+                    quantity: quantity
                 };
                 
                 addProduct(newProduct);
@@ -1186,10 +1240,12 @@
                 document.getElementById('productName').value = '';
                 document.getElementById('productPrice').value = '';
                 document.getElementById('productImage').value = '';
+                document.getElementById('productQuantity').value = '10';
             });
         });
     </script>
 </body>
 </html>
+
 
 
