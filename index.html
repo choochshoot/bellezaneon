@@ -606,6 +606,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
         .login-content {
@@ -1092,7 +1100,7 @@
             const loginBtn = document.getElementById('loginBtn');
             
             adminBtn.addEventListener('click', () => {
-                loginModal.classList.remove('hidden');
+                loginModal.classList.add('active');
             });
             
             closeAdmin.addEventListener('click', () => {
@@ -1102,7 +1110,7 @@
             loginBtn.addEventListener('click', () => {
                 const password = document.getElementById('adminPassword').value;
                 if (password === ADMIN_PASSWORD) {
-                    loginModal.classList.add('hidden');
+                    loginModal.classList.remove('active');
                     adminPanel.classList.add('active');
                     updateProductList();
                 } else {
@@ -1183,4 +1191,5 @@
     </script>
 </body>
 </html>
+
 
