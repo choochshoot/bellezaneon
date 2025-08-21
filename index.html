@@ -57,48 +57,58 @@
             text-shadow: var(--glow);
         }
 
-        .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-
-        .nav::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
-        }
-
-        .chip {
-            background: #1b1830;
-            color: var(--ink);
-            border: 1px solid rgba(255,255,255,.08);
-            padding: 8px 12px;
-            border-radius: 999px;
-            cursor: pointer;
-            transition: .2s;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .chip:hover {
-            box-shadow: var(--glow);
-            border-color: rgba(255,255,255,.18);
-        }
-
-        .chip.active {
-            background: linear-gradient(90deg, var(--brand), var(--brand2));
-            color: white;
-            box-shadow: var(--glow);
-        }
-
         .container {
             max-width: 1100px;
             margin: 0 auto;
             padding: 24px;
             flex: 1;
+        }
+
+        /* Categorías en grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 480px) {
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .category-btn {
+            background: #1b1830;
+            color: var(--ink);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 12px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: .2s;
+            text-align: center;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+        }
+
+        .category-btn:hover {
+            box-shadow: var(--glow);
+            border-color: rgba(255,255,255,.18);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(90deg, var(--brand), var(--brand2));
+            color: white;
+            box-shadow: var(--glow);
+        }
+
+        .category-btn i {
+            font-size: 20px;
+            margin-bottom: 6px;
         }
 
         .hero {
@@ -175,6 +185,7 @@
         .info h3 {
             margin: 0 0 6px 0;
             font-size: 16px;
+            line-height: 1.4;
         }
 
         .price {
@@ -204,6 +215,7 @@
             border: 1px solid rgba(255,255,255,.1);
             cursor: pointer;
             transition: filter 0.2s;
+            width: 100%;
         }
 
         .cta:hover {
@@ -420,13 +432,6 @@
         .overlay.active {
             opacity: 1;
             pointer-events: all;
-        }
-
-        /* Add to Cart Button */
-        .add-to-cart {
-            margin-top: 8px;
-            width: 100%;
-            justify-content: center;
         }
 
         /* Admin Panel */
@@ -647,6 +652,10 @@
             text-align: center;
             padding: 40px 20px;
             color: #bfb7ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .empty-cart i {
@@ -658,23 +667,84 @@
         .hidden {
             display: none;
         }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .topbar {
+                flex-wrap: wrap;
+            }
+            
+            .brand {
+                font-size: 20px;
+            }
+            
+            .hero {
+                padding: 20px;
+            }
+            
+            .hero h2 {
+                font-size: 24px;
+            }
+            
+            .categories-grid {
+                gap: 8px;
+            }
+            
+            .category-btn {
+                font-size: 12px;
+                padding: 10px 6px;
+                min-height: 60px;
+            }
+            
+            .category-btn i {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 10px 15px;
+            }
+            
+            .brand {
+                font-size: 18px;
+            }
+            
+            .admin-btn, .cart-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            
+            .container {
+                padding: 16px;
+            }
+            
+            .category-btn {
+                font-size: 11px;
+                padding: 8px 4px;
+                min-height: 55px;
+            }
+            
+            .category-btn i {
+                font-size: 16px;
+            }
+            
+            .hero {
+                padding: 16px;
+            }
+            
+            .hero h2 {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="topbar">
         <h1 class="brand">Belleza<span>Neón</span></h1>
-        <nav class="nav">
-            <button class="chip active" data-filter="all">Todos</button>
-            <button class="chip" data-filter="cepillos">Cepillos</button>
-            <button class="chip" data-filter="shampoos">Shampoos</button>
-            <button class="chip" data-filter="secadoras">Secadoras</button>
-            <button class="chip" data-filter="planchas">Planchas</button>
-            <button class="chip" data-filter="acrilicos-unas">Acrílicos Uñas</button>
-        </nav>
         <div style="display: flex; gap: 10px;">
             <button class="cart-btn" id="cartBtn">
                 <i class="fas fa-shopping-cart"></i>
-                Carrito
                 <span class="cart-count" id="cartCount">0</span>
             </button>
             <button class="admin-btn" id="adminBtn">
@@ -684,10 +754,16 @@
     </header>
 
     <main class="container">
+        <!-- Categorías en grid -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Las categorías se generarán con JavaScript -->
+        </div>
+
         <section class="hero">
             <h2>Brilla con estilo</h2>
             <p>Productos seleccionados. Compra directa por WhatsApp.</p>
         </section>
+        
         <section class="grid" id="productGrid"></section>
     </main>
 
@@ -826,6 +902,17 @@
         // Configuración
         const WAPP = '525618371510';
 
+        // Definir categorías con iconos
+        const CATEGORIES = [
+            { id: 'all', name: 'Todos', icon: 'fas fa-star' },
+            { id: 'cepillos', name: 'Cepillos', icon: 'fas fa-paint-brush' },
+            { id: 'shampoos', name: 'Shampoos', icon: 'fas fa-pump-soap' },
+            { id: 'secadoras', name: 'Secadoras', icon: 'fas fa-wind' },
+            { id: 'planchas', name: 'Planchas', icon: 'fas fa-fire' },
+            { id: 'acrilicos-unas', name: 'Uñas', icon: 'fas fa-hand-sparkles' },
+            { id: 'otros', name: 'Otros', icon: 'fas fa-ellipsis-h' }
+        ];
+
         // Cargar productos desde localStorage o usar los predeterminados
         let PRODUCTS = JSON.parse(localStorage.getItem('bellezaProducts')) || [
             {"id":"P001","name":"Cepillo iónico compacto","price":249,"category":"cepillos","img":"https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop","quantity":10},
@@ -850,7 +937,7 @@
             {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":4},
             {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":6},
             {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":10},
-            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/phone-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
             {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":2},
             {"id":"P025","name":"Acrílico cover nude 30g","price":249,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":25},
             {"id":"P026","name":"Monómero bajo olor 120ml","price":219,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":18},
@@ -1034,9 +1121,35 @@
             const grid = document.getElementById('productGrid');
             const data = (filter === 'all') ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
             grid.innerHTML = data.map(card).join('');
-            document.querySelectorAll('.chip').forEach(b => {
+            
+            // Actualizar estado activo de categorías
+            document.querySelectorAll('.category-btn').forEach(b => {
                 b.classList.toggle('active', b.dataset.filter === filter);
             });
+        }
+
+        function renderCategories() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            categoriesGrid.innerHTML = '';
+            
+            CATEGORIES.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn';
+                button.dataset.filter = category.id;
+                button.innerHTML = `
+                    <i class="${category.icon}"></i>
+                    <span>${category.name}</span>
+                `;
+                
+                button.addEventListener('click', () => {
+                    render(category.id);
+                });
+                
+                categoriesGrid.appendChild(button);
+            });
+            
+            // Activar la categoría "Todos" por defecto
+            document.querySelector('[data-filter="all"]').classList.add('active');
         }
 
         function updateProductList() {
@@ -1122,14 +1235,10 @@
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            // Renderizar productos iniciales
+            // Renderizar categorías y productos iniciales
+            renderCategories();
             render();
             updateCartCount();
-            
-            // Configurar filtros
-            document.querySelectorAll('.chip').forEach(b => {
-                b.addEventListener('click', () => render(b.dataset.filter));
-            });
             
             // Configurar carrito
             const cartBtn = document.getElementById('cartBtn');
@@ -1246,6 +1355,7 @@
     </script>
 </body>
 </html>
+
 
 
 
