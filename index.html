@@ -901,6 +901,7 @@
     <script>
         // Configuración
         const WAPP = '525618371510';
+        const GIF_URL = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjBmcWFiNjFidms5cGl4NXhzM3Y3NWphMTBlczIxazh5YXlvdGdhcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JQJPcJGg7zbfl39h2u/giphy.gif";
 
         // Definir categorías con iconos
         const CATEGORIES = [
@@ -912,6 +913,9 @@
             { id: 'acrilicos-unas', name: 'Uñas', icon: 'fas fa-hand-sparkles' },
             { id: 'otros', name: 'Otros', icon: 'fas fa-ellipsis-h' }
         ];
+
+        // Categorías que usarán el GIF
+        const GIF_CATEGORIES = ['cepillos', 'shampoos', 'secadoras', 'planchas'];
 
         // Cargar productos desde localStorage o usar los predeterminados
         let PRODUCTS = JSON.parse(localStorage.getItem('bellezaProducts')) || [
@@ -937,7 +941,7 @@
             {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":4},
             {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":6},
             {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":10},
-            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/phone-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
             {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":2},
             {"id":"P025","name":"Acrílico cover nude 30g","price":249,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":25},
             {"id":"P026","name":"Monómero bajo olor 120ml","price":219,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":18},
@@ -1103,9 +1107,12 @@
         // Funciones de productos
         function card(p) {
             const isOutOfStock = p.quantity <= 0;
+            // Usar GIF para categorías específicas, imagen original para otras
+            const imageUrl = GIF_CATEGORIES.includes(p.category) ? GIF_URL : p.img;
+            
             return `
                 <article class="card" data-cat="${p.category}">
-                    <div class="imgWrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
+                    <div class="imgWrap"><img src="${imageUrl}" alt="${p.name}" loading="lazy"></div>
                     <div class="info">
                         <h3>${p.name}</h3>
                         <p class="price">${price(p.price)}</p>
@@ -1219,7 +1226,7 @@
                 const newProducts = [
                     {id: "P031", name: "Kit Maquillaje Profesional", price: 899, category: "otros", img: "https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop", quantity: 10},
                     {id: "P032", name: "Paleta Sombras 12 colores", price: 459, category: "otros", img: "https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop", quantity: 15},
-                    {id: "P033", name: "Base Líquida Full Cover", price: 399, category: "otros", img: "https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop", quantity: 8}
+                    {id: "P033", name: "Base Líquida Full Cover", price: 399, category: "otros", img: "https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit-crop", quantity: 8}
                 ];
                 
                 // Agregar los nuevos productos
@@ -1288,7 +1295,7 @@
                 fileInput.click();
             });
             
-            dropArea.addEventListener('dragover', (e) => {
+            dropArea.addEventListener('dragover', (e) {
                 e.preventDefault();
                 dropArea.style.borderColor = 'var(--brand)';
             });
@@ -1355,6 +1362,7 @@
     </script>
 </body>
 </html>
+
 
 
 
