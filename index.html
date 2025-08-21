@@ -901,7 +901,6 @@
     <script>
         // Configuración
         const WAPP = '525618371510';
-        const GIF_URL = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjBmcWFiNjFidms5cGl4NXhzM3Y3NWphMTBlczIxazh5YXlvdGdhcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JQJPcJGg7zbfl39h2u/giphy.gif";
 
         // Definir categorías con iconos
         const CATEGORIES = [
@@ -914,35 +913,32 @@
             { id: 'otros', name: 'Otros', icon: 'fas fa-ellipsis-h' }
         ];
 
-        // Categorías que usarán el GIF
-        const GIF_CATEGORIES = ['cepillos', 'shampoos', 'secadoras', 'planchas'];
-
         // Cargar productos desde localStorage o usar los predeterminados
         let PRODUCTS = JSON.parse(localStorage.getItem('bellezaProducts')) || [
-            {"id":"P001","name":"Cepillo iónico compacto","price":249,"category":"cepillos","img":GIF_URL,"quantity":10},
-            {"id":"P002","name":"Cepillo desenredante pro","price":199,"category":"cepillos","img":GIF_URL,"quantity":8},
-            {"id":"P003","name":"Cepillo térmico cerámica","price":289,"category":"cepillos","img":GIF_URL,"quantity":5},
-            {"id":"P004","name":"Cepillo redondo styling","price":259,"category":"cepillos","img":GIF_URL,"quantity":12},
-            {"id":"P005","name":"Cepillo masaje cuero cabelludo","price":149,"category":"cepillos","img":GIF_URL,"quantity":7},
-            {"id":"P006","name":"Cepillo plegable con espejo","price":129,"category":"cepillos","img":GIF_URL,"quantity":3},
-            {"id":"P007","name":"Shampoo nutritivo argán 500ml","price":329,"category":"shampoos","img":GIF_URL,"quantity":20},
-            {"id":"P008","name":"Shampoo matizador violeta 300ml","price":299,"category":"shampoos","img":GIF_URL,"quantity":15},
-            {"id":"P009","name":"Shampoo sin sulfatos 400ml","price":349,"category":"shampoos","img":GIF_URL,"quantity":18},
-            {"id":"P010","name":"Shampoo fortalecedor biotina","price":319,"category":"shampoos","img":GIF_URL,"quantity":22},
-            {"id":"P011","name":"Shampoo hidratación profunda","price":309,"category":"shampoos","img":GIF_URL,"quantity":14},
-            {"id":"P012","name":"Shampoo detox carbón activo","price":289,"category":"shampoos","img":GIF_URL,"quantity":9},
-            {"id":"P013","name":"Secadora iónica 1800W","price":1299,"category":"secadoras","img":GIF_URL,"quantity":6},
-            {"id":"P014","name":"Secadora compacta viaje","price":799,"category":"secadoras","img":GIF_URL,"quantity":4},
-            {"id":"P015","name":"Secadora profesional 2200W","price":1699,"category":"secadoras","img":GIF_URL,"quantity":2},
-            {"id":"P016","name":"Secadora difusor rizos","price":1399,"category":"secadoras","img":GIF_URL,"quantity":7},
-            {"id":"P017","name":"Secadora silenciosa","price":1499,"category":"secadoras","img":GIF_URL,"quantity":3},
-            {"id":"P018","name":"Secadora turbo brush","price":1599,"category":"secadoras","img":GIF_URL,"quantity":5},
-            {"id":"P019","name":"Plancha cerámica 1\"","price":999,"category":"planchas","img":GIF_URL,"quantity":8},
-            {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":GIF_URL,"quantity":4},
-            {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":GIF_URL,"quantity":6},
-            {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":GIF_URL,"quantity":10},
-            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":GIF_URL,"quantity":3},
-            {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":GIF_URL,"quantity":2},
+            {"id":"P001","name":"Cepillo iónico compacto","price":249,"category":"cepillos","img":"https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?w=600&h=400&fit=crop","quantity":10},
+            {"id":"P002","name":"Cepillo desenredante pro","price":199,"category":"cepillos","img":"https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=600&h=400&fit=crop","quantity":8},
+            {"id":"P003","name":"Cepillo térmico cerámica","price":289,"category":"cepillos","img":"https://images.unsplash.com/photo-1608571423902-eed4a5ad810c?w=600&h=400&fit=crop","quantity":5},
+            {"id":"P004","name":"Cepillo redondo styling","price":259,"category":"cepillos","img":"https://images.unsplash.com/photo-1519415711931-702deacf5be2?w=600&h=400&fit=crop","quantity":12},
+            {"id":"P005","name":"Cepillo masaje cuero cabelludo","price":149,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop","quantity":7},
+            {"id":"P006","name":"Cepillo plegable con espejo","price":129,"category":"cepillos","img":"https://images.unsplash.com/photo-1591378603223-e15c8466e044?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P007","name":"Shampoo nutritivo argán 500ml","price":329,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":20},
+            {"id":"P008","name":"Shampoo matizador violeta 300ml","price":299,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":15},
+            {"id":"P009","name":"Shampoo sin sulfatos 400ml","price":349,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":18},
+            {"id":"P010","name":"Shampoo fortalecedor biotina","price":319,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":22},
+            {"id":"P011","name":"Shampoo hidratación profunda","price":309,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":14},
+            {"id":"P012","name":"Shampoo detox carbón activo","price":289,"category":"shampoos","img":"https://images.unsplash.com/photo-1591369822096-ffd140ec948a?w=600&h=400&fit=crop","quantity":9},
+            {"id":"P013","name":"Secadora iónica 1800W","price":1299,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":6},
+            {"id":"P014","name":"Secadora compacta viaje","price":799,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":4},
+            {"id":"P015","name":"Secadora profesional 2200W","price":1699,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":2},
+            {"id":"P016","name":"Secadora difusor rizos","price":1399,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":7},
+            {"id":"P017","name":"Secadora silenciosa","price":1499,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P018","name":"Secadora turbo brush","price":1599,"category":"secadoras","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":5},
+            {"id":"P019","name":"Plancha cerámica 1\"","price":999,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":8},
+            {"id":"P020","name":"Plancha titanio 1.25\"","price":1399,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":4},
+            {"id":"P021","name":"Plancha ondas S","price":1199,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":6},
+            {"id":"P022","name":"Plancha mini viaje","price":699,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":10},
+            {"id":"P023","name":"Plancha infrarroja","price":1499,"category":"planchas","img":"https://images.unsplash.com/phone-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":3},
+            {"id":"P024","name":"Plancha vapor pro","price":1599,"category":"planchas","img":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=600&h=400&fit=crop","quantity":2},
             {"id":"P025","name":"Acrílico cover nude 30g","price":249,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":25},
             {"id":"P026","name":"Monómero bajo olor 120ml","price":219,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":18},
             {"id":"P027","name":"Pincel kolinsky #8","price":349,"category":"acrilicos-unas","img":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&h=400&fit=crop","quantity":12},
@@ -993,7 +989,7 @@
                     return;
                 }
                 existingItem.quantity += 1;
-            else {
+            } else {
                 CART.push({
                     id: product.id,
                     name: product.name,
@@ -1107,12 +1103,9 @@
         // Funciones de productos
         function card(p) {
             const isOutOfStock = p.quantity <= 0;
-            // Usar GIF para categorías específicas, imagen original para otras
-            const imageUrl = GIF_CATEGORIES.includes(p.category) ? GIF_URL : p.img;
-            
             return `
                 <article class="card" data-cat="${p.category}">
-                    <div class="imgWrap"><img src="${imageUrl}" alt="${p.name}" loading="lazy"></div>
+                    <div class="imgWrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
                     <div class="info">
                         <h3>${p.name}</h3>
                         <p class="price">${price(p.price)}</p>
@@ -1265,7 +1258,7 @@
                 overlay.classList.remove('active');
             });
             
-            overlay.addEventListener('click', () {
+            overlay.addEventListener('click', () => {
                 cartPanel.classList.remove('active');
                 overlay.classList.remove('active');
             });
@@ -1362,6 +1355,7 @@
     </script>
 </body>
 </html>
+
 
 
 
